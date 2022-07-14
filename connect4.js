@@ -5,11 +5,19 @@
  * board fills (tie)
  */
 
+
 class Game {
   constructor(width, height) {
     this.width = width;
     this.height = height;
     this.currPlayer = 1;
+
+  }
+
+  addListener () {
+  let button = document.getElementById("submit");
+  button.addEventListener("click", this.makeBoard(this),
+  this.makeHtmlBoard(this));
   }
 
   makeBoard() {
@@ -58,9 +66,9 @@ class Game {
   }
 }
 
-let newGame = new Game(7, 6);
-newGame.makeBoard();
-newGame.makeHtmlBoard();
+let newGame = new Game(7,6);
+
+
 
 /** findSpotForCol: given column x, return top empty y (null if filled) */
 
