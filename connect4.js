@@ -5,53 +5,62 @@
  * board fills (tie)
  */
 
-const WIDTH = 7;
-const HEIGHT = 6;
-
-let currPlayer = 1; // active player: 1 or 2
-let board = []; // array of rows, each row is array of cells  (board[y][x])
-
-/** makeBoard: create in-JS board structure:
- *   board = array of rows, each row is array of cells  (board[y][x])
- */
-
-function makeBoard() {
-  for (let y = 0; y < HEIGHT; y++) {
-    board.push(Array.from({ length: WIDTH }));
-  }
-}
-
-/** makeHtmlBoard: make HTML table and row of column tops. */
-
-function makeHtmlBoard() {
-  const board = document.getElementById('board');
-
-  // make column tops (clickable area for adding a piece to that column)
-  const top = document.createElement('tr');
-  top.setAttribute('id', 'column-top');
-  top.addEventListener('click', handleClick);
-
-  for (let x = 0; x < WIDTH; x++) {
-    const headCell = document.createElement('td');
-    headCell.setAttribute('id', x);
-    top.append(headCell);
+class Game {
+  constructor(width, height) {
+    this.width = width;
+    this.height = height;
+    this.currPlayer = 1;
   }
 
-  board.append(top);
+  makeBoard() {
+    console.log(this.width, this.height);
+    let board = [];
+    for (let y = 0; y < this.height; y++) {
+      board.push(Array.from({ length: this.width }));
+    }
+    console.log(board);
+    return board;
 
-  // make main part of board
-  for (let y = 0; y < HEIGHT; y++) {
-    const row = document.createElement('tr');
+  }
 
-    for (let x = 0; x < WIDTH; x++) {
-      const cell = document.createElement('td');
-      cell.setAttribute('id', `${y}-${x}`);
-      row.append(cell);
+  makeHtmlBoard() {
+    console.log(this.width, this.height);
+    console.log(this.boardElement);
+    // make column tops (clickable area for adding a piece to that column)
+
+    let boardElement = document.getElementById('board');
+    const top = document.createElement('tr');
+    top.setAttribute('id', 'column-top');
+    top.addEventListener('click', handleClick);
+
+    for (let x = 0; x < this.width; x++) {
+      const headCell = document.createElement('td');
+      headCell.setAttribute('id', x);
+      top.append(headCell);
     }
 
-    board.append(row);
+    boardElement.append(top);
+
+    // make main part of board
+    for (let y = 0; y < this.height; y++) {
+      const row = document.createElement('tr');
+
+      for (let x = 0; x < this.width; x++) {
+        const cell = document.createElement('td');
+        cell.setAttribute('id', `${y}-${x}`);
+        row.append(cell);
+      }
+
+      boardElement.append(row);
+    }
+
+    return boardElement;
   }
 }
+
+let newGame = new Game(7, 6);
+newGame.makeBoard();
+newGame.makeHtmlBoard();
 
 /** findSpotForCol: given column x, return top empty y (null if filled) */
 
@@ -97,17 +106,17 @@ function handleClick(evt) {
   // place piece in board and add to HTML table
   board[y][x] = currPlayer;
   placeInTable(y, x);
-  
+
   // check for win
   if (checkForWin()) {
     return endGame(`Player ${currPlayer} won!`);
   }
-  
+
   // check for tie
   if (board.every(row => row.every(cell => cell))) {
     return endGame('Tie!');
   }
-    
+
   // switch players
   currPlayer = currPlayer === 1 ? 2 : 1;
 }
@@ -147,5 +156,3 @@ function checkForWin() {
   }
 }
 
-makeBoard();
-makeHtmlBoard();
