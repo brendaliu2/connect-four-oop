@@ -5,35 +5,27 @@
  * board fills (tie)
  */
 
-
 class Game {
   constructor(width, height) {
     this.width = width;
     this.height = height;
-    this.currPlayer = 1;
-
-  }
-
-  addListener () {
-  let button = document.getElementById("submit");
-  button.addEventListener("click", this.makeBoard(this),
-  this.makeHtmlBoard(this));
+    this.players = [];
+    this.makePlayers();
+    this.makeBoard();
+    this.makeHtmlBoard();
+    this.isGameOver = false;
   }
 
   makeBoard() {
-    console.log(this.width, this.height);
     let board = [];
     for (let y = 0; y < this.height; y++) {
       board.push(Array.from({ length: this.width }));
     }
-    console.log(board);
     return board;
 
   }
 
   makeHtmlBoard() {
-    console.log(this.width, this.height);
-    console.log(this.boardElement);
     // make column tops (clickable area for adding a piece to that column)
 
     let boardElement = document.getElementById('board');
@@ -66,7 +58,38 @@ class Game {
   }
 }
 
-let newGame = new Game(7,6);
+
+function addListener () {
+  let button = document.getElementById("submit");
+  button.addEventListener("click", makeGame);
+  button.addEventListener("click", getPlayer);
+}
+addListener();
+
+function makeGame () {
+  new Game(7,6);
+}
+
+class Player {
+  constructor (color) {
+    this.color = color;
+  }
+}
+
+function getPlayer() {
+  const player1colorInput = document.getElementById('player1color');
+  const player1color = player1colorInput.value;
+  return makePlayer(player1color);
+}
+
+function makePlayer(player1color) {
+
+  let player1 = new Player(player1color);
+  return player1;
+}
+
+
+
 
 
 
