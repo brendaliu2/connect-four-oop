@@ -6,11 +6,11 @@
  */
 
 class Game {
-  constructor(width, height) {
+  constructor(player1,player2,width=7, height=6) {
     this.width = width;
     this.height = height;
-    this.players = [];
-    this.makePlayers();
+    this.players = [player1, player2];
+    this.currPlayer = player1;
     this.makeBoard();
     this.makeHtmlBoard();
     this.isGameOver = false;
@@ -61,14 +61,13 @@ class Game {
 
 function addListener () {
   let button = document.getElementById("submit");
+  // button.addEventListener("click", getPlayer);
   button.addEventListener("click", makeGame);
-  button.addEventListener("click", getPlayer);
+
 }
 addListener();
 
-function makeGame () {
-  new Game(7,6);
-}
+
 
 class Player {
   constructor (color) {
@@ -76,18 +75,19 @@ class Player {
   }
 }
 
-function getPlayer() {
-  const player1colorInput = document.getElementById('player1color');
+function getPlayer(playerNum) {
+  const player1colorInput = document.getElementById(`player${playerNum}color`);
   const player1color = player1colorInput.value;
-  return makePlayer(player1color);
-}
-
-function makePlayer(player1color) {
-
   let player1 = new Player(player1color);
+  console.log(player1);
   return player1;
 }
 
+
+function makeGame () {
+  new Game(getPlayer(1),getPlayer(2));
+
+}
 
 
 
@@ -149,7 +149,7 @@ function handleClick(evt) {
   }
 
   // switch players
-  currPlayer = currPlayer === 1 ? 2 : 1;
+  currPlayer = currPlayer === this.players[0] ? this.players[1] : this.players[0];
 }
 
 /** checkForWin: check board cell-by-cell for "does a win start here?" */
